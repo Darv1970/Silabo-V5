@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Toma de decisiones y comunicación estratégica en salud</title>
+<meta name="description" content="Sitio del curso FDAV-02188, Maestría en Gerencia de Salud.">
+<style>
+:root{
+  --paper:#F2F5F3; --surface:#FFFFFF; --ink:#172433; --muted:#4C5B69;
+  --line:#CCD6D2; --clinic:#1D5E86; --clinic-soft:#DCEAF2; --signal:#8A6508; --signal-soft:#FBF1D6;
+  --focus:#1D5E86;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1A22; --surface:#16242F; --ink:#E6EDF1; --muted:#A5B4BF;
+    --line:#2C3E4B; --clinic:#7CB8DD; --clinic-soft:#1B3445; --signal:#E2B540; --signal-soft:#2E2710; --focus:#9CCBE8;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1A22; --surface:#16242F; --ink:#E6EDF1; --muted:#A5B4BF;
+  --line:#2C3E4B; --clinic:#7CB8DD; --clinic-soft:#1B3445; --signal:#E2B540; --signal-soft:#2E2710; --focus:#9CCBE8;
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 var(--sans);overflow-wrap:break-word}
+img{max-width:100%}
+a{color:var(--clinic);text-underline-offset:.18em}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:1rem;top:-5rem;background:var(--ink);color:var(--paper);padding:.6rem 1rem;z-index:10}
+.skip:focus{top:calc(env(safe-area-inset-top,0px) + .5rem)}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.2;margin:0}
+h2{font-size:clamp(1.5rem,3.2vw,2rem);margin-bottom:.4rem}
+h3{font-size:1.2rem}
+p{margin:.5rem 0 1rem;max-width:42rem}
+.lead{color:var(--muted)}
+.sub{margin:2.25rem 0 .75rem}
+
+/* Header with logos and language switch */
+.site-head{background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;align-items:center;justify-content:space-between;padding-top:.8rem;padding-bottom:.6rem}
+.lang{display:inline-flex;flex-wrap:wrap;border:1px solid var(--clinic);border-radius:6px;overflow:hidden}
+.lang button{font:inherit;font-size:.95rem;font-weight:600;padding:.45rem .9rem;min-height:44px;border:0;background:transparent;color:var(--clinic);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--clinic);color:var(--surface)}
+.lang button+button{border-left:1px solid var(--clinic)}
+
+nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:.25rem;margin:0;padding:0 0 .5rem}
+nav a{display:inline-block;padding:.5rem .7rem;text-decoration:none;color:var(--ink);font-weight:500;font-size:.95rem;border-radius:4px}
+nav a:hover{background:var(--clinic-soft)}
+
+/* Hero */
+.hero{padding:2.5rem 1.25rem 2.5rem}
+.prog{color:var(--muted);margin:0 0 .4rem;font-size:.98rem}
+.hero h1{font-size:clamp(1.9rem,5.5vw,3.3rem);max-width:20ch;letter-spacing:-.01em}
+.meta{display:flex;flex-wrap:wrap;gap:.4rem 1.5rem;margin:1.1rem 0 1.5rem;padding:0;list-style:none;color:var(--muted);font-size:.95rem}
+.meta b{color:var(--ink);font-weight:600}
+.notice{font-size:.92rem;background:var(--signal-soft);border-left:3px solid var(--signal);padding:.5rem .8rem}
+
+/* Three quick tasks */
+.quick{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:.75rem;margin:1.5rem 0 2.5rem}
+.q{display:block;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);padding:1rem 1.1rem;border-radius:6px}
+.q:first-child{border-left:5px solid var(--signal)}
+.q:hover{border-color:var(--clinic)}
+.q-h{display:block;font-weight:700;color:var(--clinic)}
+.q-b{display:block;font-size:.95rem;color:var(--muted);margin-top:.2rem}
+@media (max-width:760px){.quick{grid-template-columns:minmax(0,1fr)}}
+
+/* Course summary video (vertical 9:16) beside the hero text */
+.hero-grid{--vw:min(19rem,calc(min(70vh,34rem) * 9 / 16));display:grid;grid-template-columns:minmax(0,1fr) var(--vw);grid-template-rows:auto 1fr;grid-template-areas:"text video" "quick video";column-gap:2rem;align-items:start}
+.hero-text{grid-area:text}
+.hero-grid .quick{grid-area:quick;margin-bottom:0;align-self:start}
+.intro-video{grid-area:video;margin:0;width:100%;background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--signal);padding:.6rem .6rem .8rem;border-radius:6px}
+.intro-video video{display:block;width:100%;aspect-ratio:9/16;height:auto;background:#000;border-radius:3px}
+.intro-video figcaption{margin-top:.6rem;font-size:.92rem;line-height:1.45}
+.iv-h{display:block;font-weight:700;color:var(--clinic)}
+.iv-d{display:block;color:var(--muted)}
+.dl{font-size:.88rem;display:inline-block;margin-top:.35rem}
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "video" "quick"}
+  .intro-video{justify-self:center;width:min(100%,var(--vw));margin:.5rem 0 0}
+  .hero-grid .quick{margin-bottom:0}
+}
+
+
+
+/* Weeks as stacked cards, never a wide table */
+.week{display:grid;grid-template-columns:9rem minmax(0,1fr);gap:1.25rem;padding:1.5rem 0;border-bottom:1px dashed var(--line)}
+.week:last-child{border-bottom:0}
+.week-label{font-family:var(--serif)}
+.week-label .n{display:block;font-size:2.4rem;font-weight:700;line-height:1;color:var(--clinic)}
+.week-label .s{display:block;font-size:.9rem;color:var(--muted);font-family:var(--sans);margin-top:.3rem}
+.unit{display:inline-block;font-size:.85rem;font-weight:600;color:var(--clinic);background:var(--clinic-soft);padding:.1rem .5rem;border-radius:3px;margin-bottom:.6rem}
+.week h3{margin-bottom:.5rem}
+.week ul{margin:.25rem 0 .9rem;padding-left:1.2rem}
+.week li{margin:.15rem 0}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1rem 2rem}
+.cols h4{font-size:.95rem;margin:0 0 .25rem;font-weight:600}
+.wk-read{font-size:.95rem;margin:.2rem 0 .6rem}
+details{margin-top:.4rem;border-left:3px solid var(--line);padding-left:.9rem}
+summary{cursor:pointer;font-weight:600;color:var(--clinic);padding:.35rem 0}
+details p{font-size:.95rem;color:var(--muted)}
+@media (max-width:640px){.week{grid-template-columns:minmax(0,1fr);gap:.4rem}.cols{grid-template-columns:1fr}}
+
+/* Tasks */
+.warn{background:var(--signal-soft);border-left:4px solid var(--signal);padding:.7rem .9rem;font-weight:500}
+.btn{font:inherit;font-weight:600;padding:.55rem 1rem;min-height:44px;border-radius:4px;border:1px solid var(--clinic);background:var(--clinic);color:var(--surface);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--clinic)}
+.progress{font-size:.95rem;color:var(--muted)}
+
+footer{border-top:1px solid var(--line);padding:1.75rem 0 2.5rem;font-size:.9rem;color:var(--muted)}
+footer p{max-width:52rem}
+
+/* Logos */
+.brand{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.25rem}
+.brand img{display:block;height:64px;width:auto;border-radius:3px}
+@media (max-width:480px){.brand img{height:44px}}
+
+/* Tabs */
+.tabs-bar{position:sticky;top:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.tabs{display:flex;flex-wrap:wrap;gap:.25rem}
+.tabs [role=tab]{font:inherit;font-weight:600;font-size:.98rem;color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:.8rem .9rem .65rem;min-height:48px;cursor:pointer}
+.tabs [role=tab]:hover{color:var(--ink)}
+.tabs [role=tab][aria-selected=true]{color:var(--clinic);border-bottom-color:var(--clinic)}
+.panel{padding:2.25rem 0 3rem;scroll-margin-top:4rem}
+.panel:focus-visible{outline-offset:-3px}
+.week,.doc{scroll-margin-top:4.5rem}
+
+/* Date strip */
+.dates{list-style:none;padding:0;margin:1.25rem 0 1.5rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem}
+.date a{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;column-gap:.8rem;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--clinic);padding:.9rem 1rem;height:100%}
+.date a:hover{border-color:var(--clinic)}
+.d-num{grid-row:1/3;font-family:var(--serif);font-weight:700;font-size:2.6rem;line-height:1;color:var(--clinic)}
+.d-mon{font-weight:600;text-transform:capitalize}
+.d-wk{font-size:.9rem;color:var(--muted)}
+.d-tp{grid-column:1/-1;font-size:.93rem;line-height:1.4;margin-top:.5rem}
+.d-st{grid-column:1/-1;justify-self:start;margin-top:.5rem;font-size:.8rem;font-weight:700;padding:.05rem .45rem;border-radius:3px;background:var(--clinic-soft)}
+.d-st.now{background:var(--signal-soft);color:var(--ink);border:1px solid var(--signal)}
+.date.past a{border-top-color:var(--line)}
+.date.past .d-num{color:var(--muted)}
+@media (max-width:760px){.dates{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:380px){.dates{grid-template-columns:minmax(0,1fr)}}
+.when{font-weight:700;margin:0 0 .4rem;color:var(--ink)}
+.when::first-letter{text-transform:uppercase}
+
+/* Evaluation table, stacked on phones */
+.eval-table{border-collapse:collapse;width:100%;background:var(--surface);margin-top:1rem;font-size:.97rem}
+.eval-table th,.eval-table td{text-align:left;padding:.7rem .85rem;border-bottom:1px solid var(--line);vertical-align:top}
+.eval-table thead th{background:var(--clinic-soft);font-weight:600}
+.eval-table tbody th{font-weight:600}
+.eval-table td:nth-child(4){font-family:var(--serif);font-weight:700;font-size:1.2rem;color:var(--clinic)}
+@media (max-width:700px){
+  .eval-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .eval-table,.eval-table tbody,.eval-table tr,.eval-table th,.eval-table td{display:block;width:100%}
+  .eval-table tr{border:1px solid var(--line);border-top:4px solid var(--clinic);margin-bottom:.9rem}
+  .eval-table tbody th{font-family:var(--serif);font-size:1.15rem;background:var(--clinic-soft)}
+  .eval-table td{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr);gap:.75rem}
+  .eval-table td::before{content:attr(data-label);font-weight:600;color:var(--muted);font-size:.88rem;font-family:var(--sans)}
+}
+
+/* Readings */
+.res{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem;margin-top:1.25rem}
+@media (max-width:800px){.res{grid-template-columns:minmax(0,1fr)}}
+.doc{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--clinic);padding:1.3rem 1.3rem 1.4rem;display:flex;flex-direction:column}
+.doc h3{font-size:1.15rem;margin-bottom:.6rem}
+.doc h4{font-size:.85rem;font-weight:700;color:var(--muted);margin:.8rem 0 .15rem}
+.doc .sum{margin:0 0 .4rem}
+.apa-ref,.apa li{padding-left:2em;text-indent:-2em;font-size:.95rem;overflow-wrap:anywhere}
+.apa-ref{margin:0 0 1.1rem}
+.doc .btn{align-self:flex-start;margin-top:auto;text-decoration:none;display:inline-flex;align-items:center}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .6rem;padding:0;list-style:none}
+.tag{font-size:.82rem;font-weight:600;padding:.1rem .5rem;border-radius:3px;background:var(--clinic-soft);color:var(--ink)}
+.tag.acc{background:var(--signal-soft)}
+.empty{color:var(--muted)}
+.audios{display:grid;gap:.6rem;margin:.35rem 0 .4rem}
+.aud{margin:0;padding:.6rem .7rem .55rem;border:1px solid var(--line);border-left:4px solid var(--clinic);border-radius:4px;background:var(--paper)}
+.aud figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.2rem .8rem;font-size:.9rem;font-weight:600;margin-bottom:.35rem}
+.aud figcaption .dur{font-weight:400;color:var(--muted)}
+.aud audio{display:block;width:100%;min-height:44px}
+.sub-h{margin-top:2.75rem}
+.mat{max-width:42rem;margin-top:1.25rem}
+.mat .files{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:auto}
+.mat .files .btn{margin-top:0}
+
+/* Contact */
+.people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;max-width:48rem;margin:1.25rem 0 1.5rem}
+@media (max-width:600px){.people{grid-template-columns:minmax(0,1fr)}}
+.person{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--clinic);padding:1.1rem 1.2rem}
+.person h3{font-size:1.25rem}
+.person .inst{color:var(--muted);margin:.15rem 0 .6rem}
+.person .mail{font-weight:600;overflow-wrap:anywhere}
+.contact{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.4rem 1.5rem;max-width:48rem}
+.contact dt{font-weight:600}
+.contact dd{margin:0}
+@media (max-width:480px){.contact{grid-template-columns:minmax(0,1fr)}.contact dd{margin-bottom:.5rem}}
+
+/* Weekly checklist */
+.checkweeks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:1rem 0 1.25rem}
+@media (max-width:760px){.checkweeks{grid-template-columns:minmax(0,1fr)}}
+.checkweek{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--clinic);margin:0;padding:.9rem 1.1rem 1rem;min-width:0}
+.checkweek legend{display:contents}
+.cw-h{display:block;font-family:var(--serif);font-weight:700;font-size:1.2rem}
+.cw-d{display:inline-block;color:var(--muted);font-size:.92rem;margin-right:.6rem}
+.cw-p{display:inline-block;font-size:.8rem;font-weight:700;padding:.05rem .45rem;border-radius:3px;background:var(--clinic-soft);margin:.2rem 0 .4rem}
+.cw-p.full{background:var(--signal-soft);border:1px solid var(--signal)}
+.check{display:flex;gap:.7rem;align-items:flex-start;padding:.55rem 0;border-top:1px solid var(--line)}
+.check input{width:1.3rem;height:1.3rem;margin-top:.2rem;accent-color:var(--clinic);flex:none}
+.check label{cursor:pointer;flex:1;min-width:0;overflow-wrap:anywhere;hyphens:auto}
+.ck-t{display:block}
+.ck-d{display:block;font-size:.88rem;color:var(--muted);margin-top:.1rem}
+.ck-d::first-letter{text-transform:uppercase}
+.check input:checked + label .ck-t{text-decoration:line-through;color:var(--muted)}
+
+/* Bibliography at page end */
+.bib{border-top:1px solid var(--line);background:var(--surface);padding:2.25rem 0}
+.bib h3{font-size:1.05rem;margin:1.2rem 0 .3rem}
+.apa{list-style:none;padding:0;margin:0;max-width:52rem}
+.apa li{margin:.5rem 0}
+.bib-note{display:block;text-indent:0;font-size:.85rem;color:var(--muted)}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#principal" data-i18n="skip">Saltar al contenido</a>
+
+<header class="site-head">
+  <div class="wrap bar">
+    <div class="brand">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCACgAMoDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIBQYDBAkCAf/EAFMQAAEDAgQCBAYKDwUHBQAAAAECAwQABQYHESESMRNBUWEIIjJxgaEUGDdCUnWCkbGzFRYXIzNDVmJykpSiwdHSJFSywvAlOFV2k6O0NGNzleH/xAAbAQACAwEBAQAAAAAAAAAAAAAABQIEBgMBB//EADgRAAEDAgQBCQcCBwEAAAAAAAEAAgMEEQUSITFBBhQiUWFxgZHBEzJCobHR4RUkIzQ1UlNy8PH/2gAMAwEAAhEDEQA/AL1UpSpKKUpShCUr8JASSSAANST1VHuJ817Va1LiWNCLlKGxd10ZQfON1+jbvrjPURwNzSGy5TTshGZ5spCWtDbanHFJQhO5Uo6Aec1q1zzFwnbFKQbl7LdHNuInpP3vJ9dQfesUXvED5culwcdRrsyk8LafMkbViOM9tZ+ox150gbbtP2SebFztEPNS/MzlZBIt9iWodSpD4HqSD9NYl3OC/qJ6K321sd6Vq/zVG/Ge2nGe2lb8SrX/AB+VlSdiE7viUiJzexKD40W2KHZ0Sh/mrvRs5J6SPZdkiuDrLLqkH161FvGe2nGe2otxCsbqJCvBXzj41OVvzbw5JUETWJkFR98pIcT86d/VW4228Wq8M9La7hHlp5nolgkeccx6RVXOM9tfbMp+NIS/HecZdTulxtRSoekUwgxydukrQ4eR+3yVqLFpG++L/JWtpUI4ezau9vUiPfEfZKNy6XZLyR5+SvTv31Llkv8AacQwPZdpmIfQPLTyW2exSeYrQUtfFUjoHXqO6b09ZFP7p16lkqUpVxWkpSlCEpSlCEpSlCEpSlCEpSlCErq3K5QbRa3bjcpKI8ZoarcV6gB1k9QFfU+dEtlsfuE99LEZhBW44rkkD/XKq3Y2xxMxfeOMlbNvZJEaNryHw1dqj6uQqrVVIhbpqVTrKxtO3rJ2CyuNMx7jiZ1cKGVwrVroGQdFvd7hH+EbeetK4zXW6Tvr7aDj76GWUKccWQlCEJKlKJ5AAczWalD5nZnm5WXllfK7M83K5ukNc0ZiVNkiPDjuyHlcm2UFaj6BUm4TyddfbbnYrdWwk7iAydF/LV73zDfvFSzbLRa7LEEW0wGIbQ6mk6E+c8z6atwYQ9+r9B80wp8LkkGZ+g+agi3ZXYznpC3IDUFB65boSf1Rqaz7GSl0UkGTf4bZ7G2Vr9ZIqZaUxZhNO3cEpkzCoG73Kh9eSUrh+94kZJ/OiqH+asXMydxQwkqiS7dM096HFNk/rDT11OlKk7CqY7C3ipOwunPC3iqu3bDWIrFqbraJUdA/GlPEj9Yaj11iOk76twQFJKVAFJ2IO4PnrSMS5W4cvqFvQ2happ36WMnxFH85HL0jQ1Rmwa2sZv3qjNhDhrEb9hVfuM13LZeLhZrkifbJbkaQjktB5jsI5Edxrs4mwpe8JzgxdY/3pZ0akt+M075j1HuO9YHpO+lvN3Ru6iEoIdG6x0IVjMD5hwsVNpgywiLdkp1LQPivAc1I19aeY7xW7VUBmS7HkIfYdW062oLQ4gkKSRyIPUasJlzj5vFdvNvuC0Iu8dOqwNhIQPfpHb2j08js/oqwv6Em/wBU/oMQ9r/Dk3+v5W90pSmSbJSlKEJSlKEJSlKEJSladmZis4UwK89Hc4Z8smNF05pJHjL+SN/ORXjjlFyucsjY2F7tgoxzbxubze1Yetz2tvhL0dUk7PvDn50p5Dv1PZUacddfpO/Xz06T/QFJpGmRxcVjZ6h0zy93FZG3wpt0ubFvt8dciU+rgbaRzUf4DtPVVjMCZeW/CMRMqQG5V3Wn75J01DWvNLfYO08z5tq6eVuBU4ZsabpcWR9l5iAVBQ3jtncNjvPNXzdVSDV2mpQzpO3Wgw6gEYEsg6X0/KUpSrqbJSlKEJSlKEJSlKELrXC3wrrbXYFxityYzo0W04NQf5HvG4qu+YWX0rCEv2bDLkizvK0bdO6mVH3i/wCCuvz1ZGuvOhRLlbn4E5hD8Z9BbcaXyUDXCeBso13VOro21DbHfgVT3jrtW25zLTdo9yt7ymZMdYW2sdR7D2g8iOw1lMdYUk4NxU5b1lTkRwdLEfV+Mb15H84cj8/XWs9JSowlp7Vk3h0Ty06EK2+E8SRMV4Wj3eKAhSvEeZ11LTg8pP8AEdxFZuq3ZR4sNhxsi2yXeGDcyGV6nZDvvFfP4p8/dVkabwvztud1rKGq5xEHHcbpSlK6q4lKUoQlKUoQlVpzmxGbtmO7b2nNY1rT7GSAdi4d3D8+g+TVjp81q22mVcXjo3GZW+rXsSkq/hVKZU16dOfmyCVPPuKeWT1qUST6zUHtzCySY1NlY2McfRcnSDvqRsnMLJxDjU3KW2FwbZwuqChst0+Qn0aFR8w7ajDj7atZlNYRYsrLfxo4ZE0ezXtt9V+SD5khNc2wgHVLMLg9tML7DVbvSlK7rXJSsdf77a8MYamX+9STHt8NHSPuhBXwp1A14Ugk7kcq0SD4QGU9yuka3Q8SuuSZLqGGkewXhxLUoJSNSnQbkV3jppZWl0bCQOoLjJUxRODXuAJ6ypMpQjQkHmNq0zGGa2BcB3hi14pvK4Up9n2Q22mM47qjiKddUpI5g7VCOJ8rssYJPYpSSsibmkIA7VudKj67Z25aWOJa5Nzv7jLV0iJnQ1CG6rpGSopCtk7bg7HesZ7Y3J/8qXf2B/8Aors2hqXC4jPkVxdXUzTYyDzClSlRX7Y3J/8AKl39gf8A6KzFgzly6xMLkbLfXJH2NhrnytYjqOjZR5SvGSNdNeQ3odQ1DRd0ZA7ihtdTuNmyAnvC3ylRWPCOyeI1GKXf2B/+intjcnvypd/YH/6Kl+n1X+J3kVH9Qpf8jfMLZMysKJxXgWQyy2FT4gMiIdNyoDdHyht59Kqr0nnq2uDcf4Vx9DlzMJ3JU1qI4lp5SmFtcKiOIDRYGu3ZVcc0bGnDuaFyiMo4Iz6hLYA5BLm5A8yuIeiqE9O5rrPFiEpxeNj2tqIzcHTRayHSkgpUUqB1BHMHtq3OB7/9s+AbbeFKBeca4H+51Hiq+cjX01TzjqePB7vJdt15sLivwTiJbYPYocCvWlPz1GNmVcMHmyTZODlNdK/FrS22pajolIKie4b1qv3ScF7f7Y+dhz+VEtRFFb2jgL9ZstK+VjPfIC2ulYxWIbMjDrd9cntt29xIUh5YI4tdhoOZOx20roWzHWFrvPTChXRJfWeFCHUKb4z2AkaE91RNTCCGl4udtd0GaMEAuGq2KlKV3XRaXm1ONvyavrqVaKdaTHHy1pSfUTVR+k3/AP2rf5j4Wn4ywG7YrbKjxnnH2nSuRxcPCgkkeKCdeVQ57XbFf/HbL/3f6a6MtbVZ7FqWeaYFjbgBRbbYyrjeYduR5Ul9tgfKUE/xq8DbTcdlEdpIS22kNpA6gBoPUKgbDGRGIbNjS1XebeLU9Hhym33G2g5xKCTroNU6a1PdePtwVjCKZ8LXGQWJSlKVBOVgcaYXYxpgG6YVkzHYbVwaDKn2khSkDiCtQDsfJqiEOzt4e8IiLYWX1vtwMRNRUurASpYRJSkKIGwJ0r0NHMeeqCXX/e1k/wDNg/8AKFabk9I60sd9LX8VmeUMbbxSW1vbwV/V/hV/pH6ap14WvuuWX4oT9c5VxV/hV/pH6ap14WvuuWX4oT9c5VTk9/ODuKucoP5M94W5wcjIOaWU+Ab1KxJLti4tgZihpmMh0KHEpXFqVDTytNKjjOLIqDldgyHfIuJZdzVImiIWnoyGgkFClcWoUfg6emrQZO+4Bg74qZ+g1HPhbe5BZ/jhP1LlWqLEKjnogzdHMdNOsqpWYfT8yM+XpZRrr1BRJk7kXBzRwdNvcrEsu2KjTTFDTMZDoUAhKuLUqHwtPRUt23IuDlbgzGt7i4kl3NcnD0uKWnoyGgkcBVxahR38XTTvr88En3JLz8bq+pbqW8wvcjxT8USvqVVHEcQqOdugzdG4FtOxTw/D6fmrZ8vSsdde1Uayjy/YzLx/9rUm6PW5AhuSunaaDh1RwjTQkc+L1VOntQLP+Xty/YG/66hDJrH9uy2zF+2O6QZcxgwXY3RRSkL1WU6HxiBp4pqf/bc4L/JXEP6zH9VNcTdiIm/a3y27N/FKsMbhxh/dWzX7dvBSFlRlVEyrtFzgRb3IugnvofUt5hLRQUpKdAATrzrSPCLt4Q/YbwlO6kuxFnzaLT9Kq37LHNK0ZpWu4zrRbJ8FEF5DC0zCglRUniBHCTttX1mlgedjvC8O3W6XFjPx5XT8cni4eHgUkjxQTruKyNSZTOece9xWilhjloslMLt4efaqmcf+takzIi4GNm4iNromXDeaI7SAFj/CayHtdsV/8dsv/d/prYcC5L4jwrmDbb/Lu9reYirUXG2ek4lBSFJ21Tp11zOWyT0tDUxzMeWGwIU0yv8A0Ej/AOJf+E1CeBptwi2mUmHgtF+SXUkuqSD0Z4fJ3B89Te8guRnGgQCtCkgnvGlRtZsDY4sEVyPasSW6O24oLWOiKtSBpruk0gxKGV80b2A2F72txt16J7VxvdIxzQdL7W9VwZpa/avh5JiiIFOKUqMkaBslCdU6Ds1IrcLrgvD12XDdej+xVxtC2YhSzryI10G+mm1dO/YPm4kwfBhXK5I+ysU8fspKPEWo7HUDTQEacuWlYs4IxRe7pCdxZfo78WGrVLcZBCl7jmdBproNTvXN0LxM8mLMHhtttLb36vBRMbg9xLMwdbq4dakM7nWlDudaU9TJaTmviS84Ty0fvlicZblNSGUFTzQcTwKVodj6KgT7v2Y/9+tv7Cip8zct6rlkniJhCeJbcb2Qkd7agv6Aapd0nfV+lia9pJCzGNVM0MwDHEAhTdhHO/HF0x9ZrbdJlvVClTGmHgiGlBKVK02PVzqzHLY1QCFPct9zjT2z48Z5D6dO1Kgr+FX6iymp0FicwoKakNpeQR1pUAoeo1CriDCCArWB1T5mvD3XIsuWlKVTT1BzFUEuv+9rJ/5sH/lCr91Szwg8ur5hHNCZje2sPm0XGSJqJjIP9kkagqSsjyfGHEknY66cxWg5PSNEr43GxcLBIOUEbjEyRouGm5V1F/hVfpH6ap34WvuuWX4oH1zlcts8LbGMe0IYuOGbPcZaU6ezOkcZ6Q/CUhOo18xA81R4+9j3PvNZLiWEyrg8Es/eWymPBZB5k78KBqTudST1k1dwrC5qKczz2DQDrdUsUxSGsgEMFy4kaWVysnfcAwd8VNfxqOfC29yCz/HCfqXKmvD1ljYcwlbMPw1FTFvitxUKOxUEJA1Pn0J9NQp4WvuQWj44T9S5SjD3h+INeNi4+qbV7CzD3MPBoH0X54JPuSXn43V9S3Ut5he5Hin4olfUqqJPBJ9yS8/G6vqW6lrML3I8U/FEr6lVGI/1B3+w9EYf/T2/6n1VK8icE2HH+aX2AxE3IchC3vSNI7xaVxpKNPGHV4xqyntX8pv7lef/ALJf8qqdltj+4Za4xGJLbb4s58xVxuikqUlGi+Ek6p318Wpb9t5i38j7D/1n/wCdaPE6bEJJs1M4htuuyz2GVFBHDlqWguv1X0VjsCZcYXy4t82FhdmW21MdS88JMgvEqSnhGhPLY1hM5cbXjBGEbfNsTzDcuTM6El5oOAoCFKOx79N66eSOad0zTsV4n3S1QreuBJbYQmItagsKQVEni69q0XwmbulV5sFjQvdll2W4OwrUEJ9SFVlZIZeclk+ruPHgn9RUxsoTJT6DhbTitb+79mP/AH62/sCK2rLfN3HOKcz7VY7lKgrhyFL6ZLcRKFFKW1K2I5bgVAHSd9S14O0FUzN9cwjVEKA64T2FRSgf4jXaWBjWE2SKirZ5J2MLzqRxVrKUpSpbVKUpQhKUpQhcMyIzPt8iDIALMhpTKwfgqSUn1GqA3WBIs18m2iUkpehvrjrB7UKKf4a16CVU3wjcLKs2ZbeIWG9It5a41EDYPoASsekcKvSaZYa8Zyw8Vn+UFOXxNlHw/QqIuOrhZD4nTiHKGJEcc4pdpUYLoJ34Ru2fSk6fJNU24k9tSRkrjxvBWZDaZz3R2m5ARZZJ2bOviOH9FR37lGmFZTe0iNtwkeEVXN6gF2x0KudSn+tqVnVvEr5cbbeZWy82hxtY4VoWkKSodhB2Ir6pQhaZJyiyvmSzKkYBsCnSdSoRQkE+ZOg9VbLarNaLFbxBstrhW6MN+hiMpaTr2kJA1Pea71K6PmkeLOcSO9c2QxsN2tAPclY29YfsWI4KIeILPCukdtfSoZmMh1KV6EcQB69CRr31kqVBri03B1U3NDhYjRY2y4fsWHITkPD9ng2uO4vpVtQ2Q0lS9AOIgdegA9Fd2TGjzYT0OWw2/HeQW3WnE8SVpI0KSOsEbVy0r0uJOYnVeBoAygaLUfuV5afkDh39hR/Kn3LMtPyBw5+wo/lW3UrpziX+8+ZXPm0X9g8gsXZMNYdw0w8xh6yW+0tPqC3Uw2UtJWQNAVac9BVM8z8UJxZmrd7uyvji9L7HjHX8U34qT6dCr5VWQzyx4jB+XTsCI/w3a7JVGjhJ8ZtvTRxz0A8I71d1U5CkgADYUzw+Fz7zP4rNY/UNGWmZsNT6Ln46sz4MtjUxha84jdRoZkhMVonrQ2NVfvL0+TVY2W3ZMluPGaU686sNttp3KlE6ADzkgVfPBOG28I5f2rDqNCqIwEuqHvnT4zh/WJqeJODIw3iVXwCnL5zIdmj5n/is/SlKRrZpSlKEJSlKEJWmZpYJTjzLaZZ2kp9nt/2mCtXU8kHQa9igSk+furc6VJjyxwc3cLnLG2VhY7YrzkdS6w+tl5tbbraihaFjQpUDoQR2g7V88e2hFT74RuWK4U9zMOxx9Yr6gLo0gfgnDsHtPgq2CuxWh66rzxmtlTSNnjEjV87rKd9LKYn/APoVssgs1279amcEX+TpdoiOGE84reUykeRr1rSPnSO0Gp0rzdjy5ESY1LivuMPsrDjbrailSFA6hQI5EGraZQ58wMVNR8O4ukMwr9shqSrRDU49Xchzu5Hq7KTYjhrmEyxDTiOpaPB8Xa8CCY68D19nepupTr0OxpSRaVKUpQhKUpQhKUpQhKxWJMR2nCeGJV+vckMQ4ydVHmpaveoSOtROwFdfFmMMP4Jw8u84inojMDUNoHjOPq+A2nmpXqHWRVL8zc0rzmRfw/JBiWuOo+w7elWobB9+s++WRzPVyG3O/Q0D6l19m9aV4libKNthq87D1K6WOca3LHeNZWILkODpPEYjg6pjtDyUD6Seskmtc4663HWawnhm7YzxdDw7ZmuOTJVus+S0geU4vsSkb/MOZrUiNsTOoBYUvkmf1uJ+alnwdMDLv2NlYtnM626zq+88Q2dkkeLp28APEe8pq2dYXCeGLZg7B8HDlpQRGio0K1DxnVndTivzlHU+rqrNVkayo9vIXcOC+gYdR81hDDvue9KUpVVXkpSlCEpSlCEpSlCFxSY0eZDdiS2G347yC2604niStJGhSR1giqYZz5OzMvrqu8Wdt2RhmQv7255SoajyacPZ8FXXyO/O6lcMyHEuFvegz4zUmK+gtusPJCkOJPMKB5irtFWvpX5hqOIS/EcPZWR5To4bH/uC81uOnHU75s+DpcrCt+/4CZeuNp3W7bRquRFHXwdbiB+sO/nUAEkEg8wdK21NNFUszxm/osDVUstK/JKLevcpvy68IvEeEmGbTiNpd/tLYCUKW5pKYT2JWdlgdivQRVlsI5q4Dxs2hNjxBH9lKG8GUegfSezgV5XySa8+uKnFuD2bjuqlVYJDOczeiez7JhR47UU4DXdJvbv5r03IIOigQe/alee1izUzEw2hLVnxjdWWU8mHHumbHyXOIVukTwnc04yAl6TZpenW9AAJ/UUmk8nJ6oB6JBTyPlJTuHTaR81dWlUzc8KbMxaNEMYfaPwhCUfpXWv3XwgM2LqhTasVrhIVzTAjtsfvAcXrqLeT9STqQPH8Kb+UdKB0QT4flXfut4tNit6p17ucS3RkjUuy3UtJ9Gp39FQZjnwoLBbW3IWBoZvEvkJ0lKm4yD2pTspz90d5qqVxutyu80y7tcZU+Qfxsp5TqvnUTXV4qZ03J+NhvKc3yCUVXKOaQZYW5e3crYMSYsv+L74u74juj0+WoaBTh0S2n4KEjZKe4Vh+OuvxVtGB8AYozBvn2Ow5ALiUEdPLd1SxHB61r+hI1J6hThzI4WXOjQkTfaTvsLlx81jrNaLpiG/RrNZYTsydJXwNMNDdR7T2AcyTsBuau7lLlbb8tcMFC1Nyr3LSDOmJG224ab7EJ9Z3PUBzZZZUYeyzsxRBHsy6vpAlXN1Oi3PzED3iNfe9fMk1vtZDE8T5wfZxe79VtcIwjmo9rLq/6flKUpSdPkpSlCEpSlCEpSlCEpSlCEpSlCE69ai/MTInBeP1uz+hNmvK9zcISAOkP/ut8l+fZXfUoUrrDPJC7PGbFcZoI525JG3CohjbIjMPBbjr6rSq825G4nWxJdAHatvy0fMR31GROi1IIIUk6FJ5jzjqr08BIOoOh7RWs4jy7wNi7iViLCtsnOn8epkId/6idFeutFTcoyBadt+0fZZyp5NNJvA+3YfuvOniFfnEKuXdvBUy4nKUu2zb5alHkluQl9A9DiSfXWrSfBAjFZMPHzyU9QftySf3XBTVmOUTt3Ed4PpdKX4BWN2aD3EetlV3iFOIVZpvwP3eL77mA3w/mW06+tys3bvBFwqysKumLrzLA5pYZaYB9J4jUnY3RD47+B+yi3Aq0n3LeI+6qXxba1msN4RxRi+aImGbDOua9dCqO2ShH6Sz4qfSautYcgMqLAtLreF27g8ncO3R1Unf9E+L+7Ujxo0aHERFhx2Y7CBolllAQhPmSNhS6o5RsAtCy/emNPyaedZn27lWfAfgq8K2rhmHc0qA0V9ircvY9zj38ED5VWPtFmtNgs7NpslujW+CyNG48dAQlPf3nvO5rvUrO1VdNVG8rvDgtJSUEFILRN8eKUpSqiuJSlKEJSlKEJSlKEJSlKEL/9k=" alt="Universidad UTE" width="101" height="80">
+      <img src="data:image/jpeg;base64,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" alt="Universidad Técnica Particular de Loja (UTPL)" width="156" height="80">
+    </div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button type="button" data-lang="es" aria-pressed="true" lang="es">Español</button>
+      <button type="button" data-lang="en" aria-pressed="false" lang="en">English</button>
+    </div>
+  </div>
+</header>
+
+<main id="principal">
+  <div class="wrap hero hero-grid">
+    <div class="hero-text">
+      <p class="prog" id="programa"></p>
+      <h1 id="titulo-curso">Toma de decisiones y comunicación estratégica en salud</h1>
+      <ul class="meta" id="meta"></ul>
+      <p class="notice" id="aviso-traduccion" hidden data-i18n="translation_notice"></p>
+    </div>
+
+    <figure class="intro-video" id="video-resumen" aria-labelledby="video-h">
+      <video id="video-player" controls playsinline preload="metadata" aria-describedby="video-d">
+        <p>Su navegador no reproduce este video.</p>
+      </video>
+      <figcaption>
+        <span class="iv-h" id="video-h" data-i18n="video_h">Resumen de la materia en video</span>
+        <span class="iv-d" id="video-d"></span>
+        <a class="dl" id="video-dl" download data-i18n="video_dl">Descargar el video</a>
+      </figcaption>
+    </figure>
+
+    <div class="quick">
+      <a class="q" href="#cronograma" data-tab-link="cronograma" id="q-proxima">
+        <span class="q-h" data-i18n="q_next">Próxima actividad</span>
+        <span class="q-b" id="q-proxima-txt"></span>
+      </a>
+      <a class="q" href="#recursos" data-tab-link="recursos">
+        <span class="q-h" data-i18n="q_read">Lecturas de consulta</span>
+        <span class="q-b" data-i18n="q_read_b">Dos artículos con resumen, audio en español e inglés, referencia APA y enlace</span>
+      </a>
+      <a class="q" href="#contacto" data-tab-link="contacto">
+        <span class="q-h" data-i18n="q_contact">Contactar a los docentes</span>
+        <span class="q-b" id="q-contact-txt"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="tabs-bar">
+    <div class="wrap">
+      <div class="tabs" role="tablist" aria-label="Secciones del curso" data-i18n-aria="tabs">
+        <button role="tab" id="tab-cronograma" aria-controls="cronograma" aria-selected="true" data-i18n="tab_cron">Cronograma</button>
+        <button role="tab" id="tab-evaluacion" aria-controls="evaluacion" aria-selected="false" tabindex="-1" data-i18n="tab_eval">Evaluación</button>
+        <button role="tab" id="tab-recursos" aria-controls="recursos" aria-selected="false" tabindex="-1" data-i18n="tab_rec">Recursos</button>
+        <button role="tab" id="tab-contacto" aria-controls="contacto" aria-selected="false" tabindex="-1" data-i18n="tab_con">Contacto</button>
+        <button role="tab" id="tab-tareas" aria-controls="tareas" aria-selected="false" tabindex="-1" data-i18n="tab_tar">Mis tareas</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="panel" id="cronograma" role="tabpanel" aria-labelledby="tab-cronograma" tabindex="0">
+    <div class="wrap">
+      <h2 data-i18n="cron_h">Cronograma de clases</h2>
+      <p class="lead" data-i18n="cron_lead">Cuatro sesiones sincrónicas de 2 horas, los sábados de septiembre de 2026. La hora de conexión se publica en el Aula Virtual.</p>
+      <ol class="dates" id="fechas"></ol>
+      <div id="semanas"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="evaluacion" role="tabpanel" aria-labelledby="tab-evaluacion" tabindex="0" hidden>
+    <div class="wrap">
+      <h2 data-i18n="eval_h">Esquema de evaluación</h2>
+      <p class="lead" data-i18n="eval_lead">Según el sílabo: dos evaluaciones parciales con componente formativo y sumativo, y una evaluación final sumativa.</p>
+      <table class="eval-table">
+        <thead><tr>
+          <th scope="col" data-i18n="th_period">Periodo de evaluación</th>
+          <th scope="col" data-i18n="th_form">Componente formativo</th>
+          <th scope="col" data-i18n="th_sum">Componente sumativo</th>
+          <th scope="col" data-i18n="th_glob">Ponderación global</th>
+          <th scope="col" data-i18n="th_act">Actividades de evaluación</th>
+        </tr></thead>
+        <tbody id="eval-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel" id="recursos" role="tabpanel" aria-labelledby="tab-recursos" tabindex="0" hidden>
+    <div class="wrap">
+      <h2 data-i18n="rec_h">Artículos de consulta</h2>
+      <p class="lead" data-i18n="rec_lead">Los enlaces abren la fuente original en otra pestaña.</p>
+      <div class="res" id="lecturas"></div>
+      <h2 class="sub-h" id="material-h" data-i18n="mat_h">Material de clases</h2>
+      <p class="lead" data-i18n="mat_lead">Presentaciones usadas en las sesiones sincrónicas. Descárguelas o ábralas en PDF desde el teléfono.</p>
+      <div id="materiales"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="contacto" role="tabpanel" aria-labelledby="tab-contacto" tabindex="0" hidden>
+    <div class="wrap">
+      <h2 data-i18n="con_h">Contacto</h2>
+      <div class="people" id="docentes"></div>
+      <dl class="contact" id="contacto-datos"></dl>
+    </div>
+  </section>
+
+  <section class="panel" id="tareas" role="tabpanel" aria-labelledby="tab-tareas" tabindex="0" hidden>
+    <div class="wrap">
+      <h2 data-i18n="tar_h">Mis tareas por semana</h2>
+      <p class="lead" data-i18n="tar_lead">Las fechas son tentativas y coinciden con la clase de cada semana. Confirme los plazos en el Aula Virtual.</p>
+      <p class="warn" data-i18n="tar_warn">Marcar aquí no entrega la tarea ni crea un registro académico. Las entregas se hacen en el Aula Virtual. Las marcas se guardan solo en este navegador y no se envían a nadie.</p>
+      <p class="progress" id="progreso" aria-live="polite"></p>
+      <div class="checkweeks" id="lista"></div>
+      <button class="btn ghost" type="button" id="reiniciar" data-i18n="reset">Borrar mis marcas</button>
+    </div>
+  </section>
+</main>
+
+<section class="bib" aria-labelledby="t-bib">
+  <div class="wrap">
+    <h2 id="t-bib" data-i18n="bib_h">Bibliografía del sílabo</h2>
+    <h3 data-i18n="bib_basic">Bibliografía básica</h3>
+    <ul class="apa" id="bib-basica"></ul>
+    <h3 data-i18n="bib_compl">Bibliografía complementaria</h3>
+    <ul class="apa" id="bib-compl"></ul>
+    <h3 data-i18n="bib_art">Artículos de consulta</h3>
+    <ul class="apa" id="bib-art"></ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><p id="pie"></p></div>
+</footer>
+
+<noscript><p class="wrap">Este sitio necesita JavaScript para mostrar el cronograma. El sílabo oficial está en el Aula Virtual.</p></noscript>
+<!-- DATOS DEL CURSO: edite solo este bloque (fechas, docentes, enlaces, tareas). -->
+<script type="application/json" id="silabo">
+{
+  "version": "2026-10-09b",
+  "zona_horaria": "America/Guayaquil",
+  "fuente": "Sílabo aprobado FDAV-02188, Dirección de Postgrados, Universidad UTE",
+  "curso": {
+    "nombre": {
+      "es": "Toma de decisiones y comunicación estratégica en salud",
+      "en": "Decision-making and strategic communication in health"
+    },
+    "programa": {
+      "es": "Maestría en Gerencia de Salud",
+      "en": "Master's in Health Management"
+    },
+    "codigo": "FDAV-02188",
+    "periodo": {
+      "es": "abril a agosto de 2026",
+      "en": "April to August 2026"
+    },
+    "nivel": "1",
+    "sede": "Quito",
+    "horas": 96
+  },
+  "video_resumen": {
+    "src": "media/video-resumen-curso.mp4",
+    "tipo": "video/mp4",
+    "poster": "media/video-resumen-curso-poster.jpg",
+    "duracion": "1:01",
+    "peso": "8,3 MB",
+    "idioma": "es",
+    "descripcion": {
+      "es": "1 minuto, en español, con subtítulos en pantalla: cronograma de cuatro sábados, entregas en el Aula Virtual y esquema de evaluación.",
+      "en": "1 minute, in Spanish with on-screen captions: four-Saturday schedule, submissions in the Virtual Classroom and assessment scheme."
+    }
+  },
+  "semanas": [
+    {
+      "n": 1,
+      "fecha": "2026-09-05",
+      "horas": 2,
+      "fuente_en_el_silabo": "§10, Sesión No 1",
+      "unidad": {
+        "es": "Unidad 3: Comunicación en salud",
+        "en": "Unit 3: Communication in health"
+      },
+      "titulo": {
+        "es": "Habilidades comunicativas en entornos de salud",
+        "en": "Communication skills in health settings"
+      },
+      "contenidos": {
+        "es": [
+          "Habilidades comunicativas, escucha y comunicación no verbal",
+          "Psicología sanitaria",
+          "Proceso comunicativo sanitario"
+        ],
+        "en": [
+          "Communication skills, listening and non-verbal communication",
+          "Health psychology",
+          "The health communication process"
+        ]
+      },
+      "actividades": {
+        "es": [
+          "Clase sincrónica: discusión sobre las habilidades comunicativas aplicadas a los entornos de salud del Ecuador",
+          "Aprendizaje autónomo: revisión del contenido de la Unidad Didáctica 3"
+        ],
+        "en": [
+          "Live class: discussion of communication skills applied to health settings in Ecuador",
+          "Independent study: review of Teaching Unit 3 content"
+        ]
+      },
+      "evaluacion": {
+        "es": "Revisión de material de referencia en la plataforma. La plataforma evalúa el avance porcentual logrado por el alumno y asigna la nota respectiva.",
+        "en": "Review of reference material on the platform. The platform measures each student's percentage of progress and assigns the corresponding grade."
+      },
+      "lecturas": [
+        "florez"
+      ]
+    },
+    {
+      "n": 2,
+      "fecha": "2026-09-12",
+      "horas": 2,
+      "fuente_en_el_silabo": "§10, Sesión No 2",
+      "unidad": {
+        "es": "Unidad 3: Comunicación en salud",
+        "en": "Unit 3: Communication in health"
+      },
+      "titulo": {
+        "es": "Media training: voceros eficientes en salud",
+        "en": "Media training: effective health spokespeople"
+      },
+      "contenidos": {
+        "es": [
+          "El proceso comunicativo",
+          "Comunicación verbal y no verbal: lenguaje corporal",
+          "Comunicación médico–paciente",
+          "Comunicación en situaciones de riesgo"
+        ],
+        "en": [
+          "The communication process",
+          "Verbal and non-verbal communication: body language",
+          "Doctor–patient communication",
+          "Communication in risk situations"
+        ]
+      },
+      "actividades": {
+        "es": [
+          "Clase sincrónica: Taller Media Training, creando voceros eficientes en el entorno de salud",
+          "Aprendizaje autónomo: revisión del contenido de la Unidad Didáctica 3"
+        ],
+        "en": [
+          "Live class: Media Training workshop, building effective spokespeople in health settings",
+          "Independent study: review of Teaching Unit 3 content"
+        ]
+      },
+      "evaluacion": {
+        "es": "Revisión de material de referencia en la plataforma. La plataforma evalúa el avance porcentual logrado por el alumno y asigna la nota respectiva.",
+        "en": "Review of reference material on the platform. The platform measures each student's percentage of progress and assigns the corresponding grade."
+      },
+      "lecturas": [
+        "florez"
+      ]
+    },
+    {
+      "n": 3,
+      "fecha": "2026-09-19",
+      "horas": 2,
+      "fuente_en_el_silabo": "§10, Sesión No 3",
+      "unidad": {
+        "es": "Unidades 3 y 4: Comunicación en salud; Resolución de conflictos",
+        "en": "Units 3 and 4: Communication in health; Conflict resolution"
+      },
+      "titulo": {
+        "es": "Agresión en el contexto sanitario",
+        "en": "Aggression in health settings"
+      },
+      "contenidos": {
+        "es": [
+          "Estilos comunicativos",
+          "Abordaje de la agresión en el contexto sanitario",
+          "Técnicas de resolución de conflictos: la negociación y la mediación"
+        ],
+        "en": [
+          "Communication styles",
+          "Addressing aggression in health settings",
+          "Conflict resolution techniques: negotiation and mediation"
+        ]
+      },
+      "actividades": {
+        "es": [
+          "Clase sincrónica: discusión sobre la agresión en el contexto sanitario, casos prácticos y resoluciones",
+          "Aprendizaje autónomo: revisión del contenido de la Unidad Didáctica 4"
+        ],
+        "en": [
+          "Live class: discussion of aggression in health settings, practical cases and resolutions",
+          "Independent study: review of Teaching Unit 4 content"
+        ]
+      },
+      "evaluacion": {
+        "es": "Revisión de material de referencia en la plataforma. La plataforma evalúa el avance porcentual logrado por el alumno y asigna la nota respectiva.",
+        "en": "Review of reference material on the platform. The platform measures each student's percentage of progress and assigns the corresponding grade."
+      },
+      "lecturas": [
+        "casallas"
+      ]
+    },
+    {
+      "n": 4,
+      "fecha": "2026-09-26",
+      "horas": 2,
+      "fuente_en_el_silabo": "§10, Sesión No 4",
+      "unidad": {
+        "es": "Cierre",
+        "en": "Closing"
+      },
+      "titulo": {
+        "es": "Caso práctico 2, autoevaluación y examen final",
+        "en": "Case study 2, self-assessment and final exam"
+      },
+      "contenidos": {
+        "es": [
+          "Caso práctico 2"
+        ],
+        "en": [
+          "Case study 2"
+        ]
+      },
+      "actividades": {
+        "es": [
+          "Clase sincrónica: presentación del caso en grupos y mesa de discusión",
+          "Aprendizaje autónomo: Autoevaluación 2",
+          "Aprendizaje autónomo: examen final teórico y práctico"
+        ],
+        "en": [
+          "Live class: group case presentation and panel discussion",
+          "Independent study: Self-assessment 2",
+          "Independent study: final theory and practice exam"
+        ]
+      },
+      "evaluacion": {
+        "es": "Caso práctico: exposición y participación en foro de discusión, puntaje mediante rúbrica. Autoevaluación 2: cuestionario de selección múltiple en la plataforma, calificación automática. Examen final: cuestionario en la plataforma y componente práctico con 10 preguntas tipo caso, que integra los casos 1 y 2 y los contenidos de la materia.",
+        "en": "Case study: presentation and participation in the discussion forum, scored with a rubric. Self-assessment 2: multiple-choice quiz on the platform, graded automatically. Final exam: quiz on the platform plus a practical component of 10 case-based questions integrating cases 1 and 2 and the course content."
+      },
+      "lecturas": []
+    }
+  ],
+  "lecturas": [
+    {
+      "id": "florez",
+      "titulo": "Análisis de la comunicación en la relación médico-paciente",
+      "url": "https://www.elsevier.es/es-revista-medicina-integral-63-articulo-analisis-comunicacion-relacionmedico-paciente-15330",
+      "sitio": "Elsevier",
+      "acceso": "abierto",
+      "apa": "Flórez Lozano, J. A., Martínez Suárez, P. C. y Valdés Sánchez, C. (s. f.). Análisis de la comunicación en la relación médico-paciente. *Medicina Integral*. https://www.elsevier.es/es-revista-medicina-integral-63-articulo-analisis-comunicacion-relacionmedico-paciente-15330",
+      "resumen": {
+        "es": "Explica la comunicación médico-paciente como comportamiento y detalla sus componentes verbales, paraverbales y no verbales, junto con la empatía y la escucha activa en la consulta.",
+        "en": "Explains doctor–patient communication as behaviour and details its verbal, paraverbal and non-verbal components, along with empathy and active listening in the consultation."
+      },
+      "audios": [
+        {
+          "idioma": "es",
+          "src": "media/audio/comunicacion-resumen-es.mp3",
+          "tipo": "audio/mpeg",
+          "duracion": "2:49",
+          "peso": "2,2 MB",
+          "formato": "MP3"
+        },
+        {
+          "idioma": "en",
+          "src": "media/audio/comunicacion-resumen-en.mp3",
+          "tipo": "audio/mpeg",
+          "duracion": "2:19",
+          "peso": "1,7 MB",
+          "formato": "MP3"
+        }
+      ]
+    },
+    {
+      "id": "casallas",
+      "titulo": "Agresiones al personal de salud y afectaciones en la prestación del servicio sanitario en Latinoamérica. Estado de la cuestión, 2011-2021",
+      "url": "https://doi.org/10.5281/zenodo.6419726",
+      "sitio": "DOI 10.5281/zenodo.6419726",
+      "acceso": "abierto",
+      "apa": "Casallas Murillo, A. L., Peña Valero, A. M., Moreno Rodríguez, B., Marulanda Lenis, C. A. y Herrera Rodríguez, T. (2022). Agresiones al personal de salud y afectaciones en la prestación del servicio sanitario en Latinoamérica. Estado de la cuestión, 2011-2021. *Revista Salud, Historia y Sanidad On-Line, 17*(1), 7–18. https://doi.org/10.5281/zenodo.6419726",
+      "resumen": {
+        "es": "Revisión de 34 estudios latinoamericanos: la mayoría de agresiones al personal de salud provienen de familiares y pacientes, y se asocian con demoras, falta de recursos y la comunicación de malas noticias.",
+        "en": "Review of 34 Latin American studies: most aggression against health staff comes from relatives and patients, linked to delays, lack of resources and breaking bad news."
+      },
+      "audios": [
+        {
+          "idioma": "es",
+          "src": "media/audio/agresiones-resumen-es.m4a",
+          "tipo": "audio/mp4",
+          "duracion": "1:30",
+          "peso": "2,9 MB",
+          "formato": "M4A"
+        },
+        {
+          "idioma": "en",
+          "src": "media/audio/agresiones-resumen-en.m4a",
+          "tipo": "audio/mp4",
+          "duracion": "1:44",
+          "peso": "3,4 MB",
+          "formato": "M4A"
+        }
+      ]
+    }
+  ],
+  "materiales": [
+    {
+      "id": "habilidades-comunicativas",
+      "semana": 1,
+      "idioma": "es",
+      "titulo": {
+        "es": "Habilidades comunicativas, escucha y comunicación no verbal",
+        "en": "Communication skills, listening and non-verbal communication"
+      },
+      "descripcion": {
+        "es": "Presentación de clase (22 diapositivas): habilidades comunicativas, escucha activa y sus técnicas, comunicación no verbal, categorías de gestos y ejemplos en la gestión de salud.",
+        "en": "Class slides (22 slides, in Spanish): communication skills, active listening and its techniques, non-verbal communication, gesture categories and examples in health management."
+      },
+      "archivos": [
+        {
+          "formato": "PPTX",
+          "src": "media/material/habilidades-comunicativas-escucha-no-verbal.pptx",
+          "peso": "2,8 MB",
+          "accion": "descargar"
+        },
+        {
+          "formato": "PDF",
+          "src": "media/material/habilidades-comunicativas-escucha-no-verbal.pdf",
+          "peso": "2,1 MB",
+          "accion": "abrir"
+        }
+      ]
+    }
+  ],
+  "bibliografia": [
+    {
+      "tipo": "basica",
+      "apa": "Nichols, R. G., Stevens, L. A., Jay, A., Prince, G. M. y Bartolomé, F. (2002). *Comunicación eficaz*. Deusto.",
+      "nota": {
+        "es": "Biblioteca UTE, formato físico, código 30106",
+        "en": "UTE Library, print, call number 30106"
+      },
+      "enlace": {
+        "url": "https://search.worldcat.org/search?q=Comunicaci%C3%B3n%20eficaz%20Deusto%202002",
+        "texto": {
+          "es": "Buscar la publicación en WorldCat",
+          "en": "Find the publication on WorldCat"
+        }
+      }
+    },
+    {
+      "tipo": "basica",
+      "apa": "Schmidt, W. H., Tannenbaum, R., Wetlaufer, S., Blake, R. R., Keiser, T. C. y Ertel, D. (2001). *Negociación y resolución de conflictos*. Deusto.",
+      "nota": {
+        "es": "Biblioteca UTE, formato físico, código 30107",
+        "en": "UTE Library, print, call number 30107"
+      },
+      "enlace": {
+        "url": "https://search.worldcat.org/search?q=Negociaci%C3%B3n%20y%20resoluci%C3%B3n%20de%20conflictos%20Deusto%202001",
+        "texto": {
+          "es": "Buscar la publicación en WorldCat",
+          "en": "Find the publication on WorldCat"
+        }
+      }
+    },
+    {
+      "tipo": "complementaria",
+      "apa": "Organización Panamericana de la Salud. (2022). *Guía para la toma de decisiones informada por la evidencia, incluso en las emergencias de salud*. https://iris.paho.org/handle/10665.2/56828",
+      "nota": {
+        "es": "Libro electrónico, acceso abierto en el repositorio IRIS de la OPS",
+        "en": "E-book, open access in the PAHO IRIS repository"
+      }
+    }
+  ],
+  "evaluacion": [
+    {
+      "periodo": {
+        "es": "Primera evaluación",
+        "en": "First assessment"
+      },
+      "formativo": "60 %",
+      "sumativo": "40 %",
+      "peso": "35 %",
+      "actividades": {
+        "es": "Autoevaluación 1, caso práctico 1, participación",
+        "en": "Self-assessment 1, case study 1, participation"
+      }
+    },
+    {
+      "periodo": {
+        "es": "Segunda evaluación",
+        "en": "Second assessment"
+      },
+      "formativo": "60 %",
+      "sumativo": "40 %",
+      "peso": "35 %",
+      "actividades": {
+        "es": "Autoevaluación 2, caso práctico 2, participación",
+        "en": "Self-assessment 2, case study 2, participation"
+      }
+    },
+    {
+      "periodo": {
+        "es": "Evaluación final",
+        "en": "Final assessment"
+      },
+      "formativo": "—",
+      "sumativo": "100 %",
+      "peso": "30 %",
+      "actividades": {
+        "es": "Examen teórico/práctico final",
+        "en": "Final theory/practice exam"
+      }
+    }
+  ],
+  "contacto": {
+    "docentes": [
+      {
+        "nombre": "Daniel Rodríguez",
+        "correo": "daniel.rodriguezv@ute.edu.ec",
+        "institucion": "Universidad UTE"
+      },
+      {
+        "nombre": "Juan Pablo Arrobo",
+        "correo": "jparrobo1@utpl.edu.ec",
+        "institucion": "UTPL"
+      }
+    ],
+    "canal": {
+      "es": "Aula Virtual (Moodle): material, foros y entregables",
+      "en": "Virtual Classroom (Moodle): materials, forums and submissions"
+    },
+    "tutorias": {
+      "es": "Microsoft Teams o Zoom; horario por confirmar en el Aula Virtual",
+      "en": "Microsoft Teams or Zoom; schedule to be confirmed in the Virtual Classroom"
+    }
+  },
+  "tareas": [
+    {
+      "semana": 1,
+      "items": [
+        {
+          "id": "s1-clase",
+          "texto": {
+            "es": "Asistir a la clase sincrónica: habilidades comunicativas en los entornos de salud del Ecuador",
+            "en": "Attend the live class: communication skills in Ecuadorian health settings"
+          },
+          "fecha": "2026-09-05"
+        },
+        {
+          "id": "s1-ud3",
+          "texto": {
+            "es": "Revisar el contenido de la Unidad Didáctica 3 en la plataforma",
+            "en": "Review Teaching Unit 3 content on the platform"
+          },
+          "fecha": "2026-09-05"
+        },
+        {
+          "id": "s1-lect",
+          "texto": {
+            "es": "Leer «Análisis de la comunicación en la relación médico-paciente»",
+            "en": "Read \"Análisis de la comunicación en la relación médico-paciente\""
+          },
+          "fecha": "2026-09-05"
+        }
+      ]
+    },
+    {
+      "semana": 2,
+      "items": [
+        {
+          "id": "s2-taller",
+          "texto": {
+            "es": "Participar en el taller Media Training: creando voceros eficientes",
+            "en": "Take part in the Media Training workshop: building effective spokespeople"
+          },
+          "fecha": "2026-09-12"
+        },
+        {
+          "id": "s2-ud3",
+          "texto": {
+            "es": "Completar la revisión de la Unidad Didáctica 3 en la plataforma",
+            "en": "Finish reviewing Teaching Unit 3 on the platform"
+          },
+          "fecha": "2026-09-12"
+        }
+      ]
+    },
+    {
+      "semana": 3,
+      "items": [
+        {
+          "id": "s3-clase",
+          "texto": {
+            "es": "Participar en la discusión de casos sobre agresión en el contexto sanitario",
+            "en": "Take part in the case discussion on aggression in health settings"
+          },
+          "fecha": "2026-09-19"
+        },
+        {
+          "id": "s3-ud4",
+          "texto": {
+            "es": "Revisar el contenido de la Unidad Didáctica 4 en la plataforma",
+            "en": "Review Teaching Unit 4 content on the platform"
+          },
+          "fecha": "2026-09-19"
+        },
+        {
+          "id": "s3-lect",
+          "texto": {
+            "es": "Leer «Agresiones al personal de salud… 2011-2021»",
+            "en": "Read \"Agresiones al personal de salud… 2011-2021\""
+          },
+          "fecha": "2026-09-19"
+        }
+      ]
+    },
+    {
+      "semana": 4,
+      "items": [
+        {
+          "id": "s4-caso",
+          "texto": {
+            "es": "Presentar en grupo el caso práctico 2 y participar en la mesa de discusión",
+            "en": "Present case study 2 in your group and join the panel discussion"
+          },
+          "fecha": "2026-09-26"
+        },
+        {
+          "id": "s4-auto",
+          "texto": {
+            "es": "Resolver la Autoevaluación 2 en la plataforma",
+            "en": "Complete Self-assessment 2 on the platform"
+          },
+          "fecha": "2026-09-26"
+        },
+        {
+          "id": "s4-exam",
+          "texto": {
+            "es": "Rendir el examen final teórico y práctico en la plataforma",
+            "en": "Take the final theory and practice exam on the platform"
+          },
+          "fecha": "2026-09-26"
+        }
+      ]
+    }
+  ],
+  "normativa_url": "https://ute.edu.ec/normativas/"
+}
+</script>
+<script>
+/* Sitio del curso FDAV-02188. Todo el contenido vive en el bloque JSON «silabo»; los videos y audios, en la carpeta media/. */
+(function () {
+  'use strict';
+
+  var UI = {
+    es: {
+      skip: 'Saltar al contenido', tabs: 'Secciones del curso',
+      tab_cron: 'Cronograma', tab_eval: 'Evaluación', tab_rec: 'Recursos', tab_con: 'Contacto', tab_tar: 'Mis tareas',
+      q_next: 'Próxima actividad', q_read: 'Lecturas de consulta', q_read_b: 'Dos artículos con resumen, audio en español e inglés, referencia APA y enlace',
+      q_contact: 'Contactar a los docentes', q_contact_b: 'por correo institucional',
+      cron_h: 'Cronograma de clases', cron_lead: 'Cuatro sesiones sincrónicas de 2 horas, los sábados de septiembre de 2026. La hora de conexión se publica en el Aula Virtual.',
+      eval_h: 'Esquema de evaluación', eval_lead: 'Según el sílabo: dos evaluaciones parciales con componente formativo y sumativo, y una evaluación final sumativa.',
+      th_period: 'Periodo de evaluación', th_form: 'Componente formativo', th_sum: 'Componente sumativo', th_glob: 'Ponderación global', th_act: 'Actividades de evaluación',
+      rec_h: 'Artículos de consulta', rec_lead: 'Los enlaces abren la fuente original en otra pestaña.',
+      video_h: 'Resumen de la materia en video', video_dl: 'Descargar el video', video_fallback: 'Su navegador no reproduce este video. Puede descargarlo.',
+      audio_h: 'Resumen en audio', lang_es: 'Español', lang_en: 'Inglés', download: 'Descargar',
+      mat_h: 'Material de clases', mat_lead: 'Presentaciones usadas en las sesiones sincrónicas. Descárguelas o ábralas en PDF desde el teléfono.',
+      mat_dl: 'Descargar PowerPoint', mat_pdf: 'Ver en PDF', slides_lang: 'Diapositivas en español',
+      audio_label: function (lg, title) { return 'Resumen en audio en ' + lg.toLowerCase() + ': ' + title; },
+      summary: 'Resumen', reference: 'Referencia (APA 7)', access: 'Acceso', open_link: 'Abrir el artículo',
+      con_h: 'Contacto', c_channel: 'Canal principal', c_tut: 'Tutorías', write: 'Escribir a',
+      tar_h: 'Mis tareas por semana', tar_lead: 'Las fechas son tentativas y coinciden con la clase de cada semana. Confirme los plazos en el Aula Virtual.',
+      tar_warn: 'Marcar aquí no entrega la tarea ni crea un registro académico. Las entregas se hacen en el Aula Virtual. Las marcas se guardan solo en este navegador y no se envían a nadie.',
+      reset: 'Borrar mis marcas', due: 'Fecha tentativa', reset_q: '¿Borrar sus marcas de este navegador?',
+      bib_h: 'Bibliografía del sílabo', bib_basic: 'Bibliografía básica', bib_compl: 'Bibliografía complementaria', bib_art: 'Artículos de consulta',
+      translation_notice: '',
+      week: 'Semana', session: 'Sesión', hours: 'horas', contents: 'Contenidos', activities: 'Actividades',
+      how: 'Cómo se evalúa', reading_for: 'Lectura de la semana', none_reading: 'Sin lectura asignada en el sílabo',
+      time_tbc: '. Hora en el Aula Virtual.', next_done: 'Las cuatro sesiones ya se realizaron. Revise el Aula Virtual.',
+      next_none: 'Fechas por confirmar en el Aula Virtual.', today: 'Hoy', past: 'Realizada', upcoming: 'Próxima',
+      new_tab: '(abre en otra pestaña)', acc: { abierto: 'Acceso abierto' },
+      progress: function (n, t) { return n + ' de ' + t + ' tareas marcadas en su lista personal.'; },
+      week_prog: function (n, t) { return n + ' de ' + t; },
+      code: 'Código', period: 'Periodo', level: 'Nivel', campus: 'sede', load: 'Carga total',
+      footer: 'Contenido tomado del sílabo aprobado FDAV-02188 y de los artículos indicados. Normativa institucional: ',
+      footer2: '. Este sitio no recoge datos personales. Versión de datos: ',
+      load_error: 'Los datos del curso tienen un error de formato. Revise el bloque «silabo» dentro de index.html.'
+    },
+    en: {
+      skip: 'Skip to content', tabs: 'Course sections',
+      tab_cron: 'Schedule', tab_eval: 'Assessment', tab_rec: 'Readings', tab_con: 'Contact', tab_tar: 'My tasks',
+      q_next: 'Next activity', q_read: 'Course readings', q_read_b: 'Two articles with summary, audio in Spanish and English, APA reference and link',
+      q_contact: 'Contact the instructors', q_contact_b: 'by institutional email',
+      cron_h: 'Class schedule', cron_lead: 'Four 2-hour live sessions on Saturdays in September 2026. The start time is posted in the Virtual Classroom.',
+      eval_h: 'Assessment scheme', eval_lead: 'Per the syllabus: two partial assessments with formative and summative components, and one summative final assessment.',
+      th_period: 'Assessment period', th_form: 'Formative component', th_sum: 'Summative component', th_glob: 'Overall weight', th_act: 'Assessment activities',
+      rec_h: 'Course readings', rec_lead: 'Links open the original source in a new tab.',
+      video_h: 'Course summary video', video_dl: 'Download the video', video_fallback: 'Your browser cannot play this video. You can download it.',
+      audio_h: 'Audio summary', lang_es: 'Spanish', lang_en: 'English', download: 'Download',
+      mat_h: 'Class materials', mat_lead: 'Slides used in the live sessions. Download them, or open the PDF on your phone.',
+      mat_dl: 'Download PowerPoint', mat_pdf: 'View as PDF', slides_lang: 'Slides in Spanish',
+      audio_label: function (lg, title) { return 'Audio summary in ' + lg + ': ' + title; },
+      summary: 'Summary', reference: 'Reference (APA 7)', access: 'Access', open_link: 'Open the article',
+      con_h: 'Contact', c_channel: 'Main channel', c_tut: 'Tutoring', write: 'Email',
+      tar_h: 'My tasks by week', tar_lead: 'Dates are tentative and match each week\'s class. Confirm deadlines in the Virtual Classroom.',
+      tar_warn: 'Ticking a task here does not submit it and creates no academic record. Submissions are made in the Virtual Classroom. Ticks are stored only in this browser and are not sent to anyone.',
+      reset: 'Clear my ticks', due: 'Tentative date', reset_q: 'Clear your ticks from this browser?',
+      bib_h: 'Syllabus bibliography', bib_basic: 'Core bibliography', bib_compl: 'Supplementary bibliography', bib_art: 'Course readings',
+      translation_notice: 'English is an unofficial translation for convenience. The approved Spanish syllabus is the official document and prevails. The course summary video is in Spanish.',
+      week: 'Week', session: 'Session', hours: 'hours', contents: 'Content', activities: 'Activities',
+      how: 'How it is assessed', reading_for: 'Reading for this week', none_reading: 'No reading assigned in the syllabus',
+      time_tbc: '. Time in the Virtual Classroom.', next_done: 'All four sessions have taken place. Check the Virtual Classroom.',
+      next_none: 'Dates to be confirmed in the Virtual Classroom.', today: 'Today', past: 'Done', upcoming: 'Next',
+      new_tab: '(opens in a new tab)', acc: { abierto: 'Open access' },
+      progress: function (n, t) { return n + ' of ' + t + ' tasks ticked in your personal list.'; },
+      week_prog: function (n, t) { return n + ' of ' + t; },
+      code: 'Code', period: 'Term', level: 'Level', campus: 'campus', load: 'Total workload',
+      footer: 'Content taken from the approved syllabus FDAV-02188 and the listed articles. University regulations: ',
+      footer2: '. This site collects no personal data. Data version: ',
+      load_error: 'The course data has a format error. Check the "silabo" block inside index.html.'
+    }
+  };
+
+  var LANG_KEY = 'tdce-salud-idioma', TASK_KEY = 'tdce-salud-tareas-v2';
+  var D = null, lang = 'es', done = {};
+  try { var sl = localStorage.getItem(LANG_KEY); if (sl === 'en' || sl === 'es') lang = sl; } catch (e) {}
+  try { done = JSON.parse(localStorage.getItem(TASK_KEY) || '{}') || {}; } catch (e) { done = {}; }
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function t(k) { return UI[lang][k]; }
+  function L(o) { return o && typeof o === 'object' && !Array.isArray(o) ? (o[lang] || o.es) : o; }
+  function save() { try { localStorage.setItem(TASK_KEY, JSON.stringify(done)); } catch (e) {} }
+  function extLink(href, text) {
+    var a = el('a', null, text); a.href = href; a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', text + ' ' + t('new_tab')); return a;
+  }
+  /* APA: *texto* va en cursiva; las URL se convierten en enlaces */
+  function apa(node, str) {
+    str.split(/(\*[^*]+\*|https?:\/\/\S+)/).forEach(function (part) {
+      if (!part) return;
+      if (part[0] === '*') node.appendChild(el('i', null, part.slice(1, -1)));
+      else if (/^https?:/.test(part)) { var a = extLink(part, part); a.className = 'url'; node.appendChild(a); }
+      else node.appendChild(document.createTextNode(part));
+    });
+    return node;
+  }
+
+  /* Fechas: solo día, en hora de Ecuador */
+  function fmtDate(iso, opts) {
+    return new Date(iso + 'T12:00:00-05:00').toLocaleDateString(lang === 'es' ? 'es-EC' : 'en-US',
+      Object.assign({ weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: D.zona_horaria }, opts || {}));
+  }
+  function ecToday() { return new Date().toLocaleDateString('en-CA', { timeZone: D.zona_horaria }); }
+  function status(iso) { var d = ecToday(); return iso < d ? 'past' : iso === d ? 'today' : 'future'; }
+
+  /* ---------- Pestañas (patrón ARIA, flechas, Inicio y Fin) ---------- */
+  var tabs = [].slice.call(document.querySelectorAll('[role="tab"]'));
+  function selectTab(id, focus) {
+    tabs.forEach(function (tb) {
+      var on = tb.getAttribute('aria-controls') === id;
+      tb.setAttribute('aria-selected', String(on)); tb.tabIndex = on ? 0 : -1;
+      $(tb.getAttribute('aria-controls')).hidden = !on;
+      if (on && focus) tb.focus();
+    });
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+  }
+  tabs.forEach(function (tb, i) {
+    tb.addEventListener('click', function () { selectTab(tb.getAttribute('aria-controls')); });
+    tb.addEventListener('keydown', function (e) {
+      var k = e.key, j = null;
+      if (k === 'ArrowRight') j = (i + 1) % tabs.length;
+      else if (k === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+      else if (k === 'Home') j = 0; else if (k === 'End') j = tabs.length - 1;
+      if (j !== null) { e.preventDefault(); selectTab(tabs[j].getAttribute('aria-controls'), true); }
+    });
+  });
+  function openFromHash(scroll) {
+    var h = (location.hash || '').slice(1); if (!h) return;
+    var target = $(h); if (!target) return;
+    var panel = target.closest('[role="tabpanel"]'); if (!panel) return;
+    selectTab(panel.id);
+    if (scroll) target.scrollIntoView();
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('a[href^="#"]'); if (!a) return;
+    var id = a.getAttribute('href').slice(1), target = $(id);
+    var panel = target && target.closest('[role="tabpanel"]'); if (!panel) return;
+    e.preventDefault(); selectTab(panel.id);
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+    target.scrollIntoView(); if (target === panel) target.focus({ preventScroll: true });
+  });
+
+  /* ---------- Render ---------- */
+  function renderStatic() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(function (n) { n.textContent = t(n.getAttribute('data-i18n')); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(function (n) { n.setAttribute('aria-label', t(n.getAttribute('data-i18n-aria'))); });
+    document.querySelectorAll('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang)); });
+    $('aviso-traduccion').hidden = lang !== 'en';
+  }
+
+  function renderHero() {
+    var c = D.curso;
+    document.title = L(c.nombre);
+    $('titulo-curso').textContent = L(c.nombre);
+    $('programa').textContent = L(c.programa);
+    var m = $('meta'); m.innerHTML = '';
+    [[t('code'), c.codigo], [t('period'), L(c.periodo)], [t('level'), c.nivel + ', ' + t('campus') + ' ' + c.sede], [t('load'), c.horas + ' h']]
+      .forEach(function (p) { var li = el('li', null, p[0] + ' '); li.appendChild(el('b', null, p[1])); m.appendChild(li); });
+
+    var next = D.semanas.filter(function (w) { return w.fecha && status(w.fecha) !== 'past'; })[0];
+    var txt;
+    if (!D.semanas.some(function (w) { return w.fecha; })) txt = t('next_none');
+    else if (next) { txt = t('week') + ' ' + next.n + ', ' + L(next.titulo) + ': ' + fmtDate(next.fecha) + t('time_tbc'); $('q-proxima').href = '#semana-' + next.n; }
+    else txt = t('next_done');
+    $('q-proxima-txt').textContent = txt;
+    $('q-contact-txt').textContent = D.contacto.docentes.map(function (p) { return p.nombre; }).join(lang === 'es' ? ' y ' : ' and ') + ', ' + t('q_contact_b');
+  }
+
+  /* Video resumen: se arma una sola vez para no reiniciar la reproducción al cambiar de idioma */
+  var videoReady = false;
+  function renderVideo() {
+    var v = D.video_resumen, fig = $('video-resumen');
+    if (!v) { fig.hidden = true; return; }
+    if (!videoReady) {
+      var vid = $('video-player'); vid.innerHTML = '';
+      if (v.poster) vid.poster = v.poster;
+      var src = el('source'); src.src = v.src; src.type = v.tipo; vid.appendChild(src);
+      vid.appendChild(el('p', null, t('video_fallback')));
+      vid.setAttribute('lang', v.idioma || 'es');
+      $('video-dl').href = v.src;
+      videoReady = true;
+    }
+    $('video-d').textContent = L(v.descripcion);
+    $('video-dl').textContent = t('video_dl') + ' (MP4, ' + v.peso + ')';
+  }
+
+  function renderSchedule() {
+    var ol = $('fechas'); ol.innerHTML = '';
+    D.semanas.forEach(function (w) {
+      var st = w.fecha ? status(w.fecha) : 'future';
+      var li = el('li', 'date ' + st), a = el('a'); a.href = '#semana-' + w.n;
+      var day = new Date(w.fecha + 'T12:00:00-05:00');
+      a.appendChild(el('span', 'd-num', day.toLocaleDateString('es-EC', { day: 'numeric', timeZone: D.zona_horaria })));
+      a.appendChild(el('span', 'd-mon', day.toLocaleDateString(lang === 'es' ? 'es-EC' : 'en-US', { weekday: 'long', timeZone: D.zona_horaria })));
+      a.appendChild(el('span', 'd-wk', day.toLocaleDateString(lang === 'es' ? 'es-EC' : 'en-US', { month: 'long', year: 'numeric', timeZone: D.zona_horaria })));
+      a.appendChild(el('span', 'd-tp', t('week') + ' ' + w.n + ': ' + L(w.titulo)));
+      if (st === 'past') a.appendChild(el('span', 'd-st', t('past')));
+      if (st === 'today') a.appendChild(el('span', 'd-st now', t('today')));
+      li.appendChild(a); ol.appendChild(li);
+    });
+    var nxt = ol.querySelector('.date.today, .date.future'); if (nxt && !nxt.querySelector('.now')) nxt.querySelector('a').appendChild(el('span', 'd-st now', t('upcoming')));
+
+    var box = $('semanas'); box.innerHTML = '';
+    D.semanas.forEach(function (w) {
+      var art = el('article', 'week'); art.id = 'semana-' + w.n; art.tabIndex = -1;
+      var lab = el('div', 'week-label');
+      lab.appendChild(el('span', 'n', String(w.n)));
+      lab.appendChild(el('span', 's', t('session') + ' ' + w.n + ', ' + w.horas + ' ' + t('hours')));
+      var body = el('div');
+      body.appendChild(el('p', 'when', fmtDate(w.fecha)));
+      body.appendChild(el('span', 'unit', L(w.unidad)));
+      body.appendChild(el('h3', null, L(w.titulo)));
+      var cols = el('div', 'cols');
+      [[t('contents'), L(w.contenidos)], [t('activities'), L(w.actividades)]].forEach(function (c) {
+        var d = el('div'); d.appendChild(el('h4', null, c[0]));
+        var ul = el('ul'); c[1].forEach(function (x) { ul.appendChild(el('li', null, x)); }); d.appendChild(ul); cols.appendChild(d);
+      });
+      body.appendChild(cols);
+      var rp = el('p', 'wk-read');
+      if (w.lecturas.length) {
+        rp.appendChild(document.createTextNode(t('reading_for') + ': '));
+        w.lecturas.forEach(function (id) { var r = D.lecturas.filter(function (x) { return x.id === id; })[0]; var a = el('a', null, r.titulo); a.href = '#lectura-' + id; rp.appendChild(a); });
+      } else { rp.textContent = t('none_reading'); rp.classList.add('empty'); }
+      body.appendChild(rp);
+      var det = el('details'); det.appendChild(el('summary', null, t('how'))); det.appendChild(el('p', null, L(w.evaluacion)));
+      body.appendChild(det);
+      art.appendChild(lab); art.appendChild(body); box.appendChild(art);
+    });
+  }
+
+  function renderEval() {
+    var tb = $('eval-body'); tb.innerHTML = '';
+    var heads = [t('th_period'), t('th_form'), t('th_sum'), t('th_glob'), t('th_act')];
+    D.evaluacion.forEach(function (e) {
+      var tr = el('tr');
+      var th = el('th', null, L(e.periodo)); th.scope = 'row'; th.setAttribute('data-label', heads[0]); tr.appendChild(th);
+      [e.formativo, e.sumativo, e.peso, L(e.actividades)].forEach(function (v, i) {
+        var td = el('td', null, v); td.setAttribute('data-label', heads[i + 1]); tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+  }
+
+  function renderReadings() {
+    var box = $('lecturas'); box.innerHTML = '';
+    D.lecturas.forEach(function (r) {
+      var a = el('article', 'doc'); a.id = 'lectura-' + r.id; a.tabIndex = -1;
+      var ws = D.semanas.filter(function (w) { return w.lecturas.indexOf(r.id) > -1; }).map(function (w) { return w.n; });
+      var tags = el('ul', 'tags');
+      tags.appendChild(el('li', 'tag', t('week') + ' ' + ws.join(', ')));
+      tags.appendChild(el('li', 'tag acc', t('acc')[r.acceso]));
+      a.appendChild(tags);
+      a.appendChild(el('h3', null, r.titulo));
+      a.appendChild(el('h4', null, t('summary')));
+      a.appendChild(el('p', 'sum', L(r.resumen)));
+      if (r.audios && r.audios.length) {
+        a.appendChild(el('h4', null, t('audio_h')));
+        var box2 = el('div', 'audios');
+        /* Solo el audio del idioma elegido para la página; si faltara, se usa el disponible */
+        var mine = r.audios.filter(function (x) { return x.idioma === lang; });
+        (mine.length ? mine : r.audios.slice(0, 1)).forEach(function (au) {
+          var lg = t('lang_' + au.idioma) || au.idioma;
+          var f = el('figure', 'aud');
+          var cap = el('figcaption'); cap.appendChild(el('span', null, lg)); cap.appendChild(el('span', 'dur', au.duracion));
+          var ad = el('audio'); ad.controls = true; ad.preload = 'none'; ad.setAttribute('lang', au.idioma);
+          ad.setAttribute('aria-label', t('audio_label')(lg, r.titulo));
+          var so = el('source'); so.src = au.src; so.type = au.tipo; ad.appendChild(so);
+          var dl = el('a', 'dl', t('download') + ' (' + au.formato + ', ' + au.peso + ')'); dl.href = au.src; dl.setAttribute('download', '');
+          dl.setAttribute('aria-label', t('download') + ': ' + t('audio_label')(lg, r.titulo) + ' (' + au.formato + ', ' + au.peso + ')');
+          f.appendChild(cap); f.appendChild(ad); f.appendChild(dl); box2.appendChild(f);
+        });
+        a.appendChild(box2);
+      }
+      a.appendChild(el('h4', null, t('reference')));
+      a.appendChild(apa(el('p', 'apa-ref'), r.apa));
+      var go = extLink(r.url, t('open_link')); go.className = 'btn'; a.appendChild(go);
+      box.appendChild(a);
+    });
+
+    var mb = $('materiales'); mb.innerHTML = '';
+    (D.materiales || []).forEach(function (m) {
+      var c = el('article', 'doc mat'); c.id = 'material-' + m.id; c.tabIndex = -1;
+      var tg = el('ul', 'tags');
+      tg.appendChild(el('li', 'tag', t('week') + ' ' + m.semana));
+      if (lang !== m.idioma) tg.appendChild(el('li', 'tag acc', t('slides_lang')));
+      c.appendChild(tg);
+      var h = el('h3', null, L(m.titulo)); c.appendChild(h);
+      c.appendChild(el('p', 'sum', L(m.descripcion)));
+      var fl = el('div', 'files');
+      m.archivos.forEach(function (f) {
+        var a;
+        if (f.accion === 'abrir') { a = extLink(f.src, t('mat_pdf') + ' (' + f.peso + ')'); a.className = 'btn ghost'; }
+        else { a = el('a', 'btn', t('mat_dl') + ' (' + f.formato + ', ' + f.peso + ')'); a.href = f.src; a.setAttribute('download', ''); }
+        fl.appendChild(a);
+      });
+      c.appendChild(fl); mb.appendChild(c);
+    });
+
+    var b1 = $('bib-basica'), b2 = $('bib-compl'), b3 = $('bib-art'); b1.innerHTML = ''; b2.innerHTML = ''; b3.innerHTML = '';
+    D.bibliografia.forEach(function (b) {
+      var li = apa(el('li'), b.apa);
+      li.appendChild(el('span', 'bib-note', L(b.nota)));
+      if (b.enlace) { var s = el('span', 'bib-note'); s.appendChild(extLink(b.enlace.url, L(b.enlace.texto))); li.appendChild(s); }
+      (b.tipo === 'basica' ? b1 : b2).appendChild(li);
+    });
+    D.lecturas.forEach(function (r) { b3.appendChild(apa(el('li'), r.apa)); });
+  }
+
+  function renderContact() {
+    var box = $('docentes'); box.innerHTML = '';
+    D.contacto.docentes.forEach(function (p) {
+      var c = el('article', 'person');
+      c.appendChild(el('h3', null, p.nombre));
+      c.appendChild(el('p', 'inst', p.institucion));
+      var a = el('a', 'mail', p.correo); a.href = 'mailto:' + p.correo; a.setAttribute('aria-label', t('write') + ' ' + p.nombre + ': ' + p.correo);
+      c.appendChild(a); box.appendChild(c);
+    });
+    var dl = $('contacto-datos'); dl.innerHTML = '';
+    [[t('c_channel'), L(D.contacto.canal)], [t('c_tut'), L(D.contacto.tutorias)]].forEach(function (r) {
+      dl.appendChild(el('dt', null, r[0])); dl.appendChild(el('dd', null, r[1]));
+    });
+  }
+
+  function renderTasks(focusId) {
+    var box = $('lista'); box.innerHTML = '';
+    var total = 0, n = 0;
+    D.tareas.forEach(function (g) {
+      var w = D.semanas.filter(function (s) { return s.n === g.semana; })[0];
+      var fs = el('fieldset', 'checkweek');
+      var k = g.items.filter(function (it) { return done[it.id]; }).length;
+      total += g.items.length; n += k;
+      var lg = el('legend');
+      lg.appendChild(el('span', 'cw-h', t('week') + ' ' + g.semana));
+      if (w && w.fecha) lg.appendChild(el('span', 'cw-d', fmtDate(w.fecha, { weekday: 'long', year: undefined })));
+      lg.appendChild(el('span', 'cw-p' + (k === g.items.length ? ' full' : ''), t('week_prog')(k, g.items.length)));
+      fs.appendChild(lg);
+      g.items.forEach(function (it) {
+        var row = el('div', 'check');
+        var cb = el('input'); cb.type = 'checkbox'; cb.id = 't-' + it.id; cb.checked = !!done[it.id];
+        cb.addEventListener('change', function () { if (cb.checked) done[it.id] = true; else delete done[it.id]; save(); renderTasks(cb.id); });
+        var lb = el('label'); lb.htmlFor = cb.id;
+        lb.appendChild(el('span', 'ck-t', L(it.texto)));
+        if (it.fecha) lb.appendChild(el('span', 'ck-d', t('due') + ': ' + fmtDate(it.fecha)));
+        row.appendChild(cb); row.appendChild(lb); fs.appendChild(row);
+      });
+      box.appendChild(fs);
+    });
+    $('progreso').textContent = t('progress')(n, total);
+    if (focusId && $(focusId)) $(focusId).focus();
+  }
+
+  function renderFooter() {
+    var p = $('pie'); p.innerHTML = '';
+    p.appendChild(document.createTextNode(t('footer')));
+    p.appendChild(extLink(D.normativa_url, 'ute.edu.ec/normativas'));
+    p.appendChild(document.createTextNode(t('footer2') + D.version + '.'));
+  }
+
+  function renderAll() {
+    renderStatic(); if (!D) return;
+    renderHero(); renderVideo(); renderSchedule(); renderEval(); renderReadings(); renderContact(); renderTasks(); renderFooter();
+  }
+
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      lang = b.getAttribute('data-lang');
+      try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+      renderAll(); b.focus();
+    });
+  });
+  $('reiniciar').addEventListener('click', function () {
+    if (window.confirm(t('reset_q'))) { done = {}; try { localStorage.removeItem(TASK_KEY); } catch (e) {} renderTasks(); }
+  });
+
+  renderStatic();
+  try {
+    D = JSON.parse(document.getElementById('silabo').textContent);
+    renderAll(); openFromHash(true);
+  } catch (err) {
+    $('semanas').appendChild(el('p', 'warn', t('load_error')));
+  }
+})();
+
+</script>
+</body>
+</html>
