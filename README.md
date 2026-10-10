@@ -9,8 +9,8 @@ index.html                         página y datos del curso (bloque JSON «sila
 .nojekyll                          publica los archivos sin procesarlos con Jekyll
 media/video-resumen-curso.mp4      resumen de la materia (1 min, español)
 media/video-resumen-curso-poster.jpg
-media/audio/comunicacion-resumen-es.mp3   Flórez Lozano et al., español
-media/audio/comunicacion-resumen-en.mp3   Flórez Lozano et al., inglés
+media/audio/resumen_comunicacion_medico_paciente_es.m4a   Flórez Lozano et al., español
+media/audio/doctor_patient_communication_summary_en.m4a   Flórez Lozano et al., inglés
 media/audio/agresiones-resumen-es.m4a     Casallas Murillo et al., español
 media/audio/agresiones-resumen-en.m4a     Casallas Murillo et al., inglés
 media/material/habilidades-comunicativas-escucha-no-verbal.pptx   material de clases (semana 1)
