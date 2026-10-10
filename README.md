@@ -6,7 +6,6 @@ Sitio estático (HTML, CSS y JavaScript mínimo) para GitHub Pages. No recoge da
 
 ```
 index.html                         página y datos del curso (bloque JSON «silabo»)
-.nojekyll                          publica los archivos sin procesarlos con Jekyll
 media/video-resumen-curso.mp4      resumen de la materia (1 min, español)
 media/video-resumen-curso-poster.jpg
 media/audio/resumen_comunicacion_medico_paciente_es.m4a   Flórez Lozano et al., español
@@ -19,7 +18,7 @@ media/material/habilidades-comunicativas-escucha-no-verbal.pdf    la misma prese
 
 ## Publicar
 
-1. Cree un repositorio público y suba el contenido de esta carpeta a la raíz (con «Add file → Upload files» o con `git push`). Asegúrese de incluir el archivo oculto `.nojekyll`.
+1. Cree un repositorio público y suba el contenido de esta carpeta a la raíz (con «Add file → Upload files» o con `git push`).
 2. En *Settings → Pages*, elija *Deploy from a branch*, rama `main`, carpeta `/ (root)`.
 3. Abra la dirección `https://<usuario>.github.io/<repositorio>/` desde un teléfono y compruebe que el video se reproduce, que en Español suena el audio en español y en English el audio en inglés, y que el material de clases se descarga.
 
