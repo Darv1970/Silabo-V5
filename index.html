@@ -400,7 +400,15 @@ footer p{max-width:52rem}
     "idioma": "es",
     "descripcion": {
       "es": "1 minuto, en español, con subtítulos en pantalla: cronograma de cuatro sábados, entregas en el Aula Virtual y esquema de evaluación.",
-      "en": "1 minute, in Spanish with on-screen captions: four-Saturday schedule, submissions in the Virtual Classroom and assessment scheme."
+      "en": "1.5 minutes, narrated in English with on-screen captions in Spanish: course schedule, synchronous sessions and assessment scheme."
+    },
+    "versiones": {
+      "en": {
+        "src": "media/video-resumen-curso-en.mp4",
+        "duracion": "1:30",
+        "peso": "9,2 MB",
+        "idioma": "en"
+      }
     }
   },
   "semanas": [
@@ -648,20 +656,29 @@ footer p{max-width:52rem}
       },
       "descripcion": {
         "es": "Presentación de clase (22 diapositivas): habilidades comunicativas, escucha activa y sus técnicas, comunicación no verbal, categorías de gestos y ejemplos en la gestión de salud.",
-        "en": "Class slides (22 slides, in Spanish): communication skills, active listening and its techniques, non-verbal communication, gesture categories and examples in health management."
+        "en": "Class slides (22 slides): communication skills, active listening and its techniques, non-verbal communication, gesture categories and examples in health management."
+      },
+      "versiones": {
+        "en": { "idioma": "en" }
       },
       "archivos": [
         {
           "formato": "PPTX",
           "src": "media/material/habilidades-comunicativas-escucha-no-verbal.pptx",
           "peso": "2,8 MB",
-          "accion": "descargar"
+          "accion": "descargar",
+          "versiones": {
+            "en": { "src": "media/material/habilidades-comunicativas-escucha-no-verbal-en.pptx", "peso": "2,8 MB" }
+          }
         },
         {
           "formato": "PDF",
           "src": "media/material/habilidades-comunicativas-escucha-no-verbal.pdf",
           "peso": "2,1 MB",
-          "accion": "abrir"
+          "accion": "abrir",
+          "versiones": {
+            "en": { "src": "media/material/habilidades-comunicativas-escucha-no-verbal-en.pdf", "peso": "1,6 MB" }
+          }
         }
       ]
     }
@@ -941,7 +958,7 @@ footer p{max-width:52rem}
       tar_warn: 'Ticking a task here does not submit it and creates no academic record. Submissions are made in the Virtual Classroom. Ticks are stored only in this browser and are not sent to anyone.',
       reset: 'Clear my ticks', due: 'Tentative date', reset_q: 'Clear your ticks from this browser?',
       bib_h: 'Syllabus bibliography', bib_basic: 'Core bibliography', bib_compl: 'Supplementary bibliography', bib_art: 'Course readings',
-      translation_notice: 'English is an unofficial translation for convenience. The approved Spanish syllabus is the official document and prevails. The course summary video is in Spanish.',
+      translation_notice: 'English is an unofficial translation for convenience. The approved Spanish syllabus is the official document and prevails.',
       week: 'Week', session: 'Session', hours: 'hours', contents: 'Content', activities: 'Activities',
       how: 'How it is assessed', reading_for: 'Reading for this week', none_reading: 'No reading assigned in the syllabus',
       time_tbc: '. Time in the Virtual Classroom.', next_done: 'All four sessions have taken place. Check the Virtual Classroom.',
@@ -965,6 +982,8 @@ footer p{max-width:52rem}
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function t(k) { return UI[lang][k]; }
   function L(o) { return o && typeof o === 'object' && !Array.isArray(o) ? (o[lang] || o.es) : o; }
+  /* Versión del idioma elegido: los campos de «versiones»[lang] reemplazan a los del objeto (archivo, peso, idioma) */
+  function V(o) { var r = {}, k, x = (o.versiones && o.versiones[lang]) || {}; for (k in o) r[k] = o[k]; for (k in x) r[k] = x[k]; return r; }
   function save() { try { localStorage.setItem(TASK_KEY, JSON.stringify(done)); } catch (e) {} }
   function extLink(href, text) {
     var a = el('a', null, text); a.href = href; a.target = '_blank'; a.rel = 'noopener';
@@ -1053,22 +1072,24 @@ footer p{max-width:52rem}
     $('q-contact-txt').textContent = D.contacto.docentes.map(function (p) { return p.nombre; }).join(lang === 'es' ? ' y ' : ' and ') + ', ' + t('q_contact_b');
   }
 
-  /* Video resumen: se arma una sola vez para no reiniciar la reproducción al cambiar de idioma */
-  var videoReady = false;
+  /* Video resumen: se vuelve a armar solo si el idioma elegido tiene otro archivo, para no reiniciar la reproducción en vano */
+  var videoSrc = null;
   function renderVideo() {
     var v = D.video_resumen, fig = $('video-resumen');
     if (!v) { fig.hidden = true; return; }
-    if (!videoReady) {
+    var cur = V(v);
+    if (videoSrc !== cur.src) {
       var vid = $('video-player'); vid.innerHTML = '';
-      if (v.poster) vid.poster = v.poster;
-      var src = el('source'); src.src = v.src; src.type = v.tipo; vid.appendChild(src);
+      if (cur.poster) vid.poster = cur.poster;
+      var src = el('source'); src.src = cur.src; src.type = cur.tipo; vid.appendChild(src);
       vid.appendChild(el('p', null, t('video_fallback')));
-      vid.setAttribute('lang', v.idioma || 'es');
-      $('video-dl').href = v.src;
-      videoReady = true;
+      vid.setAttribute('lang', cur.idioma || 'es');
+      $('video-dl').href = cur.src;
+      if (videoSrc !== null) vid.load();
+      videoSrc = cur.src;
     }
     $('video-d').textContent = L(v.descripcion);
-    $('video-dl').textContent = t('video_dl') + ' (MP4, ' + v.peso + ')';
+    $('video-dl').textContent = t('video_dl') + ' (MP4, ' + cur.peso + ')';
   }
 
   function renderSchedule() {
@@ -1169,13 +1190,13 @@ footer p{max-width:52rem}
       var c = el('article', 'doc mat'); c.id = 'material-' + m.id; c.tabIndex = -1;
       var tg = el('ul', 'tags');
       tg.appendChild(el('li', 'tag', t('week') + ' ' + m.semana));
-      if (lang !== m.idioma) tg.appendChild(el('li', 'tag acc', t('slides_lang')));
+      if (lang !== V(m).idioma) tg.appendChild(el('li', 'tag acc', t('slides_lang')));
       c.appendChild(tg);
       var h = el('h3', null, L(m.titulo)); c.appendChild(h);
       c.appendChild(el('p', 'sum', L(m.descripcion)));
       var fl = el('div', 'files');
       m.archivos.forEach(function (f) {
-        var a;
+        var a; f = V(f);
         if (f.accion === 'abrir') { a = extLink(f.src, t('mat_pdf') + ' (' + f.peso + ')'); a.className = 'btn ghost'; }
         else { a = el('a', 'btn', t('mat_dl') + ' (' + f.formato + ', ' + f.peso + ')'); a.href = f.src; a.setAttribute('download', ''); }
         fl.appendChild(a);
